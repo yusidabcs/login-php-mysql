@@ -1,12 +1,13 @@
 <?php
 session_start();
 
-if(empty($_SESSION['login'])){
+if (empty($_SESSION['login'])) {
 	header("Location: login.php");
 }
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -17,23 +18,43 @@ if(empty($_SESSION['login'])){
 
 	<title>Login & Logout PHP</title>
 </head>
+
 <body>
 	<div class="container">
 
 		<div class="row">
 			<div class="col-md-4 offset-md-4  mt-5">
 
-				<div class="alert alert-success" role="alert">
-				  Berhasil login ke dalam sistem.
-				</div>
+				<?php
+				if (isset($_SESSION['error'])) {
+				?>
+					<div class="alert alert-warning" role="alert">
+						<?php echo $_SESSION['error'] ?>
+					</div>
+				<?php
+				}
+				?>
+
+				<?php
+				if (isset($_SESSION['message'])) {
+				?>
+					<div class="alert alert-success" role="alert">
+						<?php echo $_SESSION['message'] ?>
+					</div>
+				<?php
+				}
+				?>
 
 				<div class="card">
 					<div class="card-title text-center">
 						<h1>Halaman Admin</h1>
+
+						<p><a href="profile.php">Update Profile</a></p>
 					</div>
 					<div class="card-body">
-						<p>Hello <?php echo $_SESSION['username']?></p>
+						<p>Hello: <?php echo $_SESSION['nama'] ?></p>
 						<p>Kamu berhasil ke halaman admin.</p>
+						<p>Terakhir login: <?php echo $_SESSION['terakhir_login'] ?></p>
 						<center>
 							<a href="logout.php">Logout</a>
 						</center>
@@ -45,4 +66,9 @@ if(empty($_SESSION['login'])){
 
 	</div>
 </body>
+
 </html>
+<?php
+unset($_SESSION['error']);
+unset($_SESSION['message']);
+?>

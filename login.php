@@ -59,6 +59,8 @@ session_start();
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
 
+						<a href="/register.php">Register Now</a>
+
 					</div>
 				</div>
 			</div>

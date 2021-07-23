@@ -1,5 +1,19 @@
 <?php
 session_start();
+
+//include koneksi
+include "koneksi.php";
+
+//get user detail
+$username = $_SESSION['username'];
+$query = "select * from users where username = ? limit 1";
+$stmt = $mysqli->stmt_init();
+$stmt->prepare($query);
+$stmt->bind_param('s', $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_array(MYSQLI_ASSOC);
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -11,7 +25,7 @@ session_start();
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-	<title>Register Member - PHP</title>
+	<title>Update Profile - PHP</title>
 </head>
 <body>
 	<div class="container">
@@ -42,18 +56,19 @@ session_start();
 
 				<div class="card ">
 					<div class="card-title text-center">
-						<h1>Register Form</h1>
+						<h1>Profile Form</h1>
 					</div>
 					<div class="card-body">
-						<form action="process-register.php" method="post">
+						<form action="update-profile.php" method="post">
+                            <input type="hidden" name="id" class="form-control" id="id" value="<?php echo @$user['id']?>" >
 							<div class="form-group">
 								<label for="username">Nama Lengkap</label>
-								<input type="text" name="nama" class="form-control" id="name" value="<?php echo @$_SESSION['nama']?>" aria-describedby="name" placeholder="Nama lengkap" autocomplete="off">
+								<input type="text" name="nama" class="form-control" id="name" value="<?php echo @$user['nama']?>" aria-describedby="name" placeholder="Nama lengkap" autocomplete="off">
 
 							</div>
 							<div class="form-group">
 								<label for="username">Username</label>
-								<input type="text" name="username" class="form-control" id="username" value="<?php echo @$_SESSION['username']?>" aria-describedby="username" placeholder="username" autocomplete="off">
+								<input type="text" name="username" class="form-control" id="username" value="<?php echo @$user['username']?>" aria-describedby="username" placeholder="username" autocomplete="off">
 
 							</div>
 							<div class="form-group">
@@ -65,10 +80,10 @@ session_start();
 								<input type="password" name="password_confirmation" class="form-control" id="password_confirmation" value="<?php echo @$_SESSION['password_confirmation']?>"  placeholder="Password">
 							</div>
 
-							<button type="submit" class="btn btn-primary">Register</button>
+							<button type="submit" class="btn btn-primary">Update Data</button>
 						</form>
 
-						<a href="/login.php">Login Now</a>
+						<a href="/index.php">Batal</a>
 					</div>
 				</div>
 			</div>
@@ -78,5 +93,6 @@ session_start();
 	</div>
 </body>
 <?php
-session_destroy();
+unset($_SESSION['error']);
+unset($_SESSION['message']);
 ?>

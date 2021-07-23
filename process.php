@@ -29,9 +29,19 @@ if($row != null){
 	//kita cek apakah password dengan hash password sesuai.
 	if(password_verify($user['password'], $row['password'])){
 		$_SESSION['login'] = true;
-		$_SESSION['username'] =  $user['username'];
-		$_SESSION['nama'] =  $user['nama'];
+		$_SESSION['username'] =  $row['username'];
+		$_SESSION['nama'] =  $row['nama'];
+		$_SESSION['terakhir_login'] =  date('Y-m-d H:i:s');
 		$_SESSION['message']  = 'Berhasil login ke dalam sistem.';
+
+		//update last login di database
+		//check apakah user dengan username tersebut ada di table users
+		$query = "update users set terakhir_login = now() where username = ?";
+		$stmt->prepare($query);
+		$stmt->bind_param('s', $user['username']);
+		$stmt->execute();
+		$stmt->close();
+
 		header("Location: index.php");
 	}else{
 		$_SESSION['error'] = 'Password anda salah.';
